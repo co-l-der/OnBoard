@@ -1,0 +1,158 @@
+
+一. 集中式工作流(只有一个master)
+
+    1. 第一次拉取代码
+       git clone url
+
+    2. 从仓库拉取最新代码
+       git pull url
+
+    3. 修改文件后传到git上
+       git add 修改的文件
+       git commit -m "修改的描述信息"
+       git push
+
+
+二. 功能分支工作流(有多个分支)
+
+    1. 创建分支方法1--
+
+    2. 创建分支方法2--本地创建(不推荐)
+
+        1).创建一个分支(首次在本地创建)
+           git branch feature_login
+
+        2).切换到新建的分支上
+           git checkout feature_login
+           note).可以将1,2步合成一条命令
+           git checkout -b feature_login
+
+        3).将分支推送到远程仓库, 也就是建立映射关系(远程仓库还没有该分支)
+           git push origin feature_login(注意:这里是本地分支名称):feature_login(这里是远程仓库分支名称)
+
+        4).将分支推送到远程仓库, 也就是建立映射关系(远程仓库已经有分支,但还没与本地分支做映射)
+           git push u 本地分支名称:远程分支名称
+
+    3. 功能分支合并请求(pull request)
+       在github中创建pull request, 并merge到master上
+
+    4. 功能合并完成后的操作
+       1).功能分支合并完成后, 切回主干分支, 并拉取主干代码
+          git checkout master
+          git pull
+
+       2).删除功能分支(本地和远程都要删掉)
+          1).先查看需要删除的分支名称
+             git branch -a
+          2).删除远端分支
+             git push origin --delete 远端分支名称
+          3).删除本地分支
+             git branch -d 本地分支名称
+
+
+三. GitFlow工作流
+
+    1. 分支描述(用于语义化版本规范的管理)
+       master: 用于发布打tag(语义化版本规范,如1.0.0)
+       hotfix: 对已发布版本的修复打补丁, 打完补丁直接合并到master上, 修改版本最后一位, 如1.0.1-->1.0.2
+       release: 基于develop拉取的分支, 用于预发布, 测试成功之后合并到master上
+       develop: 开发分支
+       feature: 功能分支
+
+    2. 基于develop创建分支feature功能分支, 并将feature功能开发完毕
+
+       1).首先切到develop分支
+          git checkout develop
+       2).创建本地feature功能分支, 并切到feature分支
+          git checkout -b feature_sign
+       3).将本地feature功能分支推送至远程仓库
+          git push origin feature_sign:feature_sign
+       4).功能开发完成后pull request到develop分支
+          在页面中创建pull request, 并merge到develop分支上
+
+    3. feature功能开发完成后, 建立预发布分支
+
+       1).feature功能开发完毕后, 切回到develop
+          git checkout develop
+
+       2).基于develop创建预发布分支, 进行测试
+          git checkout -b release-1.0.0     --创建本地预发布分支
+          git push origin release-1.0.0:release-1.0.0   --将本地分支推送至远程仓库
+
+       3).测试人员将预发布分支拉到本地进行测试
+
+       4).测试没有问题后将release分支pull request到master上
+          创建pull request, 将release分支merge到master上
+
+    4.在release测试并合并完成之后, 基于master创建tag, 并发布版本
+
+       1).切到master分支, 并拉取最新代码
+          git checkout master
+          git pull
+
+       2).创建tag, 发布里程碑版本
+          (小知识: tag分为两种: 轻量标签(lightweigh)/附注标签(annotated), 轻量标签:常用于临时标签, 附注标签:用于里程碑发布)
+          git tag -a 1.0.0-release -m "1.0.0正式发版
+
+       3).将标签推送至远端仓库
+          git push origin --tag
+
+       4).将指定版本拉取下来供运维同学部署
+          git fetch origin tag 1.0.0-release
+
+    5. 修复1.0.0-release版本中的bug
+
+       1).切到tag为1.0.0-release的tag上
+          git checkout 1.0.0-release
+
+       2).基于1.0.0-release版, 创建hotfix分支, 并切到该分支
+          git checkout -b hotfix_0001 (注意:0001为issue中的编号)
+          git push origin hotfix_0001:hotfix_0001
+
+       3).修复bug, 提交代码, 经过测试后, pull request到master上
+          创建pull request, 将hotfix merge到master上
+
+       4).创建新tag, 并发布
+          git tag -a 1.0.1-release -m "修复上一版bug"
+          git push --tags
+
+    6. 删除用完的分支
+
+       1).删除feature功能分支, hotfix修复分支, release预发布分支
+          git branch -D feature_signin:  删除本地功能分支
+          git push origin --delete feature_signin: 删除远端功能分支
+          git branch -D hotfix_0005: 删除本地hotfix分支
+          git push origin --delete hotfix_0005: 删除远端hotfix_0005分支
+          git branch -D release-1.0.0: 删除本地预发布分支
+          git push origin --delete release-1.0.0: 删除远端预发布分支
+
+
+四. 实用的查看命令
+
+    git branch: 查看当前分支
+    git branch -a: 查看所有分支
+    git branch -vv: 查看分支之间的依赖关系
+
+    git branch b1: 创建名称为b1的本地分支
+    git push origin b1:b1  : 创建名称为b1的远程分支/将本地分支推送至远端仓库
+    git branch -d b1: 删除名称为b1的本地分支
+    git push origin --delete b1 : 删除名称为b1的远程分支
+
+    todo: 开发过程中, 有时候会使用到
+    git commit --amend: 在未push到远程仓库, 修改上一次的commit的描述信息
+
+    git tag: 查看当前本地tag
+    git show 1.0.0-release: 查看tag为1.0.0-release的附注信息
+
+    git tag -a 1.0.0-release -m "附注信息": 本地创建名为1.0.0-release的tag
+    git checkout 1.0.0-release : 切到1.0.0-release的tag下
+    git push origin --tags: 将tag推送至远端仓库
+    git tag -d 1.0.0-release: 删除名为1.0.0-release的本地tag
+    git push origin --delete tag 1.0.0-release:  删除远端仓库名为1.0.0-release
+
+    git fetch origin tag 1.0.0-release: 获取远程仓库tag为1.0.0-release的代码, 常用于拉取代码给运维部署
+
+    todo: 开发过程中非常重要的功能
+    git remote prune origin : 本地删除远程不存在的分支, 防止使用git branch -a还可以看到已经删除的分支
+
+

@@ -1,0 +1,63 @@
+
+一. 窗口相关快捷键
+
+    窗口最大化/退出最大化/退出分屏: control + command + F  注意:对飞书不起作用
+    窗口最小化: command + M
+    窗口退出: command + Q
+    窗口恢复: command + Tab 选中刚刚最小化的应用, 然后按option选择
+    前置窗口切换: control + 左键/右键
+    前置窗口预览和切换: control + 上键,  左右选择需要切换的界面, 然后按control + 下键 打开
+
+    窗口新增一个标签页: command + T
+    窗口关闭当前标签页: command + W
+
+
+二. 编辑相关快捷键
+
+    复制: command + C
+    粘贴: command + V
+    剪切: option + command + V
+    保存: command + S
+    新建: command + N
+
+
+    快速跳到行开头: command + 右键
+    快速跳到行结尾: command + 左键
+    快速选择一行: shift + command + 左键/右键
+
+    快速跳过某个单词: option + 左键/右键
+    快速选择一个单词: shift + option + 左键/右键
+
+    输入法切换: control + space
+
+    删除一行: command + delete
+
+
+三. Pycharm使用快捷键
+
+    打开配置: command + ,
+
+
+    回到上次或下次浏览的地方: command + [ / ]
+    导包: option + enter
+
+    大小写转换: command + shift + U
+
+    全局查找: 双击shift
+
+
+
+N. 通用
+
+   锁屏: control + command + Q
+   聚焦搜索: command + space
+
+   截屏: command + shift + A    (注意: 飞书打开才可以用)
+
+   预览文件: space
+
+   删除一行/删除一个文件: command + delete
+
+   terminal快速打开一个文件夹: open ./ 目录位置
+
+
